@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
+import Link from "next/link"; 
 import MaxWidthWrapper from "./MaxWidthWrapper";
 
 const Footer = () => {
