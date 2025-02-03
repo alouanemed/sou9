@@ -57,7 +57,7 @@ const Footer = () => {
                 </li>
                 <li className="text-sm">
                   <span className="font-medium text-white">Address:</span> 123
-                  E-commerce St.
+                  Hay Ezzaitoune BP 145,, Bd 2 Mars, Khouribga 25000
                 </li>
               </ul>
             </div>

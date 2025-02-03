@@ -1,5 +1,4 @@
-# SOU9
-
+# SOU9 FPK
 A modern e-commerce application built with Next.js 14, showcasing a responsive design and seamless shopping experience.
 
  
@@ -25,7 +24,7 @@ A modern e-commerce application built with Next.js 14, showcasing a responsive d
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 19+
 - npm or yarn
 
 ### Installation
@@ -55,12 +54,4 @@ Using Yarn:
 ```bash
 yarn dev
 ```
-   
-- **Next.js 14**: Chosen for its excellent developer experience, server-side rendering capabilities, and optimized performance.
-- **Tailwind CSS**: Provides rapid UI development with utility classes and excellent responsive design tools.
-- **shadcn/ui**: Offers high-quality, customizable components that work seamlessly with Tailwind CSS.
-- **Redux Toolkit**: Simplifies state management with built-in best practices and reduced boilerplate.
-- **Lucide React**: Provides a comprehensive set of consistent, customizable icons.
-- **Framer Motion**: Provides animation capabilities with an easy-to-use API for React.
-- **Zod**: Offers schema validation for TypeScript, enabling safe data parsing and validation.
- 
+    

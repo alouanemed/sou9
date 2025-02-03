@@ -16,32 +16,55 @@ const HeroComponent = async ({ title, description }: Props) => {
   const categories = await getAllCategories();
 
   return (
-    <section className="relative bg-secondary-600 bg-[url('/hero.jpeg')] bg-cover bg-center bg-no-repeat md:h-[400px]">
+    <section className="relative h-[500px] bg-[url('/hero.jpg')] bg-cover bg-fixed bg-center">
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col h-full">
-        <MaxWidthWrapper className="flex flex-col justify-between gap-6 h-full py-8">
-          {/* Header with Logo and Mobile Nav */}
+      <div className="relative z-10 h-full">
+        <MaxWidthWrapper className="h-full flex flex-col justify-between px-6 md:px-12 py-8">
+          {/* Header Section */}
           <div className="flex items-center justify-between">
             <Link href="/">
-              <Logo />
+              <Logo className="text-white" />
             </Link>
             <div className="md:hidden">
               <CategoryNavMobile categories={categories} />
             </div>
           </div>
 
-          {/* Hero Content */}
-          <Hero title={title} description={description} />
+          {/* Main Hero Section */}
+          <div className="flex flex-col items-start space-y-6 max-w-2xl">
+            <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+              {title}
+            </h1>
+            {description && (
+              <p className="text-lg md:text-xl text-gray-200">{description}</p>
+            )}
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="/products"
+                className="px-6 py-3 bg-primary text-white rounded-full text-sm font-medium shadow-lg hover:bg-primary/90 transition-all"
+              >
+                Shop Now
+              </Link>
+              <Link
+                href="/categories"
+                className="px-6 py-3 bg-secondary text-white rounded-full text-sm font-medium shadow-lg hover:bg-secondary/90 transition-all"
+              >
+                Explore Categories
+              </Link>
+            </div>
+          </div>
 
           {/* Cart Link */}
           <Link
             href="/cart"
-            className="flex items-center gap-2 text-white bg-primary hover:bg-primary/90 px-4 py-2 rounded-lg transition-all"
+            className="flex items-center gap-2 text-white text-sm font-medium bg-black/50 px-4 py-2 rounded-full hover:bg-black/70 transition-all self-start"
           >
-            My cart <ShoppingBasket size={20} />
+            View Cart <ShoppingBasket size={20} />
           </Link>
         </MaxWidthWrapper>
       </div>

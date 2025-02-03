@@ -1,8 +1,7 @@
 import {
   getAllCategories,
-  getAllProducts,
   getProductsByCategory,
-  Product,
+  getAllProducts,
 } from "@/lib/api/faker-shop";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { CategoryNav } from "@/components/CategoryNav";
@@ -28,12 +27,14 @@ export async function generateMetadata({ searchParams }: CategoryPageProps) {
   };
 }
 
-export default async function CategoryPage({ searchParams }: CategoryPageProps) {
+export default async function CategoryPage({
+  searchParams,
+}: CategoryPageProps) {
   const category = searchParams.category ?? "";
 
   let title = "Product Categories | SOU9-FPK";
   let description = "Browse our collection of product categories";
-  let products: Product[] = [];
+  let products = [];
 
   if (category) {
     title = `${category.charAt(0).toUpperCase() + category.slice(1)} | SOU9-FPK`;
@@ -47,28 +48,16 @@ export default async function CategoryPage({ searchParams }: CategoryPageProps) 
   const categories = await getAllCategories();
 
   return (
-    <main className="flex w-full flex-1 flex-col">
-      {/* Hero Section */}
-      <HeroComponent
-        title={title}
-        description={description}
-        className="bg-gradient-to-r from-primary to-secondary text-white py-16"
-      />
-
-      {/* Main Content */}
-      <div className="px-6 py-12">
-        <MaxWidthWrapper className="grid gap-12 md:grid-cols-4">
-          {/* Category Navigation */}
-          <div className="hidden md:block">
-            <CategoryNav categories={categories} />
-          </div>
-
-          {/* Product Grid */}
-          <div className="md:col-span-3">
-            <ProductGrid products={products} basePageUrl="/categories" />
-          </div>
-        </MaxWidthWrapper>
-      </div>
+    <main className="w-full">
+      <HeroComponent title={title} description={description} />
+      <MaxWidthWrapper className="py-12 md:flex">
+        <div className="basis-2/3">
+          <ProductGrid products={products} basePageUrl="/categories" />
+        </div>
+        <div className="basis-1/3 max-md:hidden">
+          <CategoryNav categories={categories} />
+        </div>
+      </MaxWidthWrapper>
     </main>
   );
 }
