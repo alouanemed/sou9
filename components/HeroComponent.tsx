@@ -1,5 +1,4 @@
 import React from "react";
-import Hero from "./Hero";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { Logo } from "./Logo";
 import { ShoppingBasket } from "lucide-react";
