@@ -11,48 +11,33 @@ import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
 
 interface ProductPageProps {
-  params: {
-    id: string;
+  params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: ProductPageProps) {
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
+  const product = await getProduct(parseInt(id));
+
+  return {
+    title: `${product.title} | SOU9-FPK`,
+    description: product.description,
   };
 }
 
-// Generate metadata for the page
-export async function generateMetadata({ params }: ProductPageProps) {
-  try {
-    const { id } = params;
-    const product = await getProduct(parseInt(id));
-
-    return {
-      title: `${product.title} | SOU9-FPK`,
-      description: product.description,
-    };
-  } catch (error) {
-    console.error("Error generating metadata:", error);
-    return {
-      title: "Product Not Found | SOU9-FPK",
-      description: "The requested product could not be found.",
-    };
-  }
-}
-
-// Generate static params for all products
 export async function generateStaticParams() {
-  try {
-    const products = await getAllProducts();
-    return products.map((product) => ({
-      id: product.id.toString(),
-    }));
-  } catch (error) {
-    console.error("Error generating static params:", error);
-    return [];
-  }
+  const products = await getAllProducts();
+  return products.map((product) => ({
+    id: product.id.toString(),
+  }));
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
   let product;
 
   try {
-    const { id } = params;
     product = await getProduct(parseInt(id));
   } catch (error) {
     console.error("Error fetching product:", error);
@@ -76,20 +61,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="px-6 py-12">
         <MaxWidthWrapper className="grid gap-12 md:grid-cols-2">
           {/* Product Image Section */}
-          <div className="flex justify-center items-center">
-            <div className="relative aspect-square w-full max-w-sm overflow-hidden rounded-lg bg-muted shadow-lg">
-              <Image
-                src={product.image}
-                alt={product.title}
-                className="object-cover transition-transform duration-500 hover:scale-110"
-                height={400}
-                width={400}
-                priority
-                sizes="(max-width: 768px) 100vw, 50vw"
-                placeholder="blur"
-                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/2wBDAR0XFyAeIBogHh4gIiAdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-              />
-            </div>
+          <div className="relative aspect-square overflow-hidden rounded-lg bg-muted shadow-lg">
+            <Image
+              src={product.image}
+              alt={product.title}
+              className="object-cover transition-transform duration-500 hover:scale-110"
+              height={400}
+              width={400}
+              priority
+              sizes="(max-width: 768px) 100vw, 50vw"
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/2wBDAR0XFyAeIBogHh4gIiAdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+            />
           </div>
 
           {/* Product Details Section */}
