@@ -9,11 +9,11 @@ import HeroComponent from "@/components/HeroComponent";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 
 interface CategoryPageProps {
-  searchParams: Record<string, string | undefined>;
+  searchParams: URLSearchParams;
 }
 
 export async function generateMetadata({ searchParams }: CategoryPageProps) {
-  const category = searchParams?.category;
+  const category = searchParams.get("category") ?? "";
   let title = "Product Categories | SOU9-FPK";
   let description = "Browse our collection of product categories";
 
@@ -27,10 +27,8 @@ export async function generateMetadata({ searchParams }: CategoryPageProps) {
   };
 }
 
-export default async function CategoryPage({
-  searchParams,
-}: CategoryPageProps) {
-  const category = searchParams.category ?? "";
+export default async function CategoryPage({ searchParams }: CategoryPageProps) {
+  const category = searchParams.get("category") ?? "";
 
   let title = "Product Categories | SOU9-FPK";
   let description = "Browse our collection of product categories";
