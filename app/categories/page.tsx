@@ -2,6 +2,7 @@ import {
   getAllCategories,
   getProductsByCategory,
   getAllProducts,
+  Product,
 } from "@/lib/api/faker-shop";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { CategoryNav } from "@/components/CategoryNav";
@@ -9,11 +10,12 @@ import HeroComponent from "@/components/HeroComponent";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 
 interface CategoryPageProps {
-  searchParams: Record<string, string | undefined>;
+  searchParams: Promise<Record<string, string | undefined>>;
 }
 
 export async function generateMetadata({ searchParams }: CategoryPageProps) {
-  const category = searchParams.category ?? "";
+  const resolvedSearchParams = await searchParams;
+  const category = resolvedSearchParams.category ?? "";
   let title = "Product Categories | SOU9-FPK";
   let description = "Browse our collection of product categories";
 
@@ -21,18 +23,16 @@ export async function generateMetadata({ searchParams }: CategoryPageProps) {
     title = `${category.charAt(0).toUpperCase() + category.slice(1)} | SOU9-FPK`;
     description = `Browse our collection of ${category} products`;
   }
-  return {
-    title,
-    description,
-  };
+  return { title, description };
 }
 
 export default async function CategoryPage({ searchParams }: CategoryPageProps) {
-  const category = searchParams.category ?? "";
+  const resolvedSearchParams = await searchParams;
+  const category = resolvedSearchParams.category ?? "";
 
   let title = "Product Categories | SOU9-FPK";
   let description = "Browse our collection of product categories";
-  let products = [];
+  let products: Product[] = [];
 
   if (category) {
     title = `${category.charAt(0).toUpperCase() + category.slice(1)} | SOU9-FPK`;
